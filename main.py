@@ -8,7 +8,7 @@ note_list = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] # 
 mapped_notes = dict(zip(note_list, frequency_array))
 duration = 2  # Длительность звука в секундах
 volume = 0.5  # Громкость звука
-discretization = 48000  # Частота дискретизации
+discretization = 96000  # Частота дискретизации
 
 
 def find_key_by_value(dictionary, value):
@@ -26,6 +26,7 @@ def generate_wave(current_frequency, duration, volume, discretization):
 
 
 while True:
+    current_streak = 0
     current_frequency = np.random.choice(frequency_array)
     current_note = find_key_by_value(mapped_notes, current_frequency)
     # Создание аудио потока
@@ -38,12 +39,13 @@ while True:
 
     # Проверка ответа
     if input_note.upper() == current_note:
-        print("Correct!")
+        current_streak += 1
+        print("Correct! " + 'Current streak: ' + str(current_streak))
     elif input_note.upper() == 'EXIT':
         break
     else:
-        print(f"Wrong, the correct answer is {current_note}")
-
+        current_streak = 0
+        print(f"Wrong, the correct answer is {current_note}, current streak: {current_streak}")
     # Закрытие потока и pyaudio
     stream.stop_stream()
     stream.close()
